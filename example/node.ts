@@ -1,7 +1,6 @@
-import * as fs from 'fs'
-import generateCss from './src/index'
+import run from '../src/index'
 
-const vars = {
+const variables = {
   borderWidths: {
     small: '1px',
     medium: '2px',
@@ -88,13 +87,8 @@ const vars = {
     },
   },
 }
-const css = generateCss(vars)
 
-console.log('Generating CSS')
-fs.writeFileSync('./tmp/styles.css', css, function (err) {
-  if (err) {
-    console.error('There was an error: ', err)
-  } else {
-    console.log('Generated! Check ./tmp/styles.css')
-  }
+run({
+  variables,
+  destination: './example/node.css',
 })

@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "ts-node node_modules/.bin/tape ./test/*.spec.ts | tap-spec",
-    "generate": "ts-node ./run.ts"
+    "example": "ts-node ./example/node.ts"
   },
   "author": "Joseph Luck",
   "license": "ISC",
