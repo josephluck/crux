@@ -1,9 +1,5 @@
 import * as fs from 'fs'
 import generateCss from './src/index'
-import brandColors from './src/brand-colors'
-
-const primary = 'red'
-const accent = 'green'
 
 const vars = {
   borderWidths: {
@@ -11,7 +7,10 @@ const vars = {
     medium: '2px',
     large: '3px',
   },
-  colors: brandColors(primary, accent),
+  colors: {
+    primary: 'red',
+    secondary: 'blue',
+  },
   dimensions: {
     1: '1rem',
     2: '2rem',
@@ -73,6 +72,20 @@ const vars = {
     6: '6rem',
     7: '7rem',
     8: '8rem',
+  },
+  media: {
+    s: {
+      min: '0em',
+      max: '30em',
+    },
+    m: {
+      min: '30em',
+      max: '60em',
+    },
+    l: {
+      min: '60em',
+      max: '90em',
+    },
   },
 }
 const css = generateCss(vars)

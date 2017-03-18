@@ -14,7 +14,6 @@
 			"es7",
 			"dom"
 		],
-		"noUnusedLocals": true,
 		"strictNullChecks": false,
 		"removeComments": false
 	},
