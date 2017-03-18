@@ -86,4 +86,4 @@ const variables = {
   },
 }
 
-console.log(generate(variables))
+generate(variables).then(css => console.log(css))

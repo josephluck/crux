@@ -1,5 +1,11 @@
+import * as postcss from 'postcss'
+import * as autoprefixer from 'autoprefixer'
+import * as stylelint from 'stylelint'
+import * as stylelintConfig from 'stylelint-config-standard'
+import * as reporter from 'postcss-reporter'
+
 import {
-  generateKeysAndValues, 
+  generateKeysAndValues,
   generateCssAttributes,
   wrapInMedia,
 } from './utils'
@@ -420,7 +426,7 @@ export function wordSpacings (vars, media) {
 }
 
 export default function (vars) {
-  return [
+  const css = [
     generateCore(vars.media),
     backgroundColors(vars.colors, vars.media),
     borderColors(vars.colors, vars.media),
@@ -446,4 +452,10 @@ export default function (vars) {
     widths(vars.dimensions, vars.media),
     wordSpacings(vars.letterSpacings, vars.media),
   ].join('\n')
+
+  return postcss([
+    stylelint(stylelintConfig),
+    autoprefixer,
+    reporter(),
+  ]).process(css)
 }

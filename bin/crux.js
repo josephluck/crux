@@ -27,9 +27,14 @@ function run () {
     var variables = fs.readFileSync(variablesPath, {
       encoding: 'utf-8'
     })
-    var css = generate(JSON.parse(variables))
-    fs.writeFileSync(outputPath, css)
-    console.log('crux has popped your css in ' + outputPath)
+    generate(JSON.parse(variables))
+      .then(css => {
+        fs.writeFileSync(outputPath, css)
+        console.log('crux has popped your css in ' + outputPath)
+      })
+      .catch(e => {
+        console.error(e)
+      })
   } catch (e) {
     console.error(e)
   }
