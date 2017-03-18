@@ -5,7 +5,9 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "ts-node node_modules/.bin/tape ./test/*.spec.ts | tap-spec",
-    "example": "ts-node ./example/node.ts"
+    "dist": "tsc",
+    "example:node": "ts-node ./example/node.ts",
+    "example:cli": "ts-node ./bin/crux.js --variables=./example/cli.json -o ./example/cli.css"
   },
   "author": "Joseph Luck",
   "license": "ISC",
@@ -19,6 +21,7 @@
     "typescript": "^2.2.1"
   },
   "dependencies": {
+    "argv": "0.0.2",
     "fs": "0.0.1-security"
   }
 }

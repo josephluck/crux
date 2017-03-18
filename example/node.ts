@@ -1,4 +1,4 @@
-import run from '../src/index'
+import generate from '../src/index'
 
 const variables = {
   borderWidths: {
@@ -88,7 +88,6 @@ const variables = {
   },
 }
 
-run({
-  variables,
-  destination: './example/node.css',
-})
+const css = generate(variables)
+
+console.log(css)
