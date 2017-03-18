@@ -73,9 +73,8 @@ const variables = {
     8: '8rem',
   },
   media: {
-    s: {
-      min: '0em',
-      max: '30em',
+    ns: {
+      min: '30em',
     },
     m: {
       min: '30em',
@@ -83,11 +82,8 @@ const variables = {
     },
     l: {
       min: '60em',
-      max: '90em',
     },
   },
 }
 
-const css = generate(variables)
-
-console.log(css)
+console.log(generate(variables))

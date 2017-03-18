@@ -28,7 +28,7 @@ export function generateCssAttributes (propertyName, classes, indent?: number): 
 
 export function wrapInMedia (css, min, max) {
   return [
-    `@media screen and (min-width: ${min}) and (max-width: ${max}) {`,
+    `@media screen${min ? ` and (min-width: ${min})` : ''}${max ? ` and (max-width: ${max})` : ''} {`,
     `${css}}`,
     ``,
   ].join('\n')
