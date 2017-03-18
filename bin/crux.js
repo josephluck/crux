@@ -2,7 +2,7 @@
 
 var fs = require('fs')
 var argv = require('argv')
-var generate = require('../dist/index.js').default
+var generate = require('../').default
 
 argv.option({
   name: 'variables',

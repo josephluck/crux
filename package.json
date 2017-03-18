@@ -1,13 +1,22 @@
 {
-  "name": "styles",
+  "name": "crux",
   "version": "1.0.0",
   "description": "generate atomic css",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "files": [
+    "bin",
+    "dist",
+    "src"
+  ],
+  "bin": {
+    "crux": "bin/crux.js"
+  },
   "scripts": {
     "test": "ts-node node_modules/.bin/tape ./test/*.spec.ts | tap-spec",
     "dist": "tsc",
     "example:node": "ts-node ./example/node.ts",
-    "example:cli": "ts-node ./bin/crux.js --variables=./example/cli.json -o ./example/cli.css"
+    "example:cli": "npm link && npm run dist && crux --variables=./example/cli.json -o ./example/cli.css",
+    "deploy": "npm run dist && npm publish"
   },
   "author": "Joseph Luck",
   "license": "ISC",
