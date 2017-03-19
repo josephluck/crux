@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var fs = require('fs')
-var argv = require('argv')
-var generate = require('../').default
+const fs = require('fs')
+const argv = require('argv')
+const generate = require('../').default
 
 argv.option({
   name: 'variables',
@@ -15,29 +15,35 @@ argv.option({
   name: 'output',
   short: 'o',
   type: 'string',
-  description: 'The relative path to your destination directory',
+  description: 'The relative path to your destination directory for a non-minified bundle',
   example: "'crux --output=./styles.css' or 'crux -o ./styles.css'"
+})
+argv.option({
+  name: 'minify',
+  short: 'm',
+  type: 'string',
+  description: 'The relative path to your destination directory for a minified bundle',
+  example: "'crux --minify=./styles.min.css' or 'crux -m ./styles.min.css'"
 })
 
 function run () {
-  try {
-    var args = argv.run()
-    var variablesPath = args.options.variables
-    var outputPath = args.options.output
-    var variables = fs.readFileSync(variablesPath, {
-      encoding: 'utf-8'
-    })
-    generate(JSON.parse(variables))
-      .then(css => {
-        fs.writeFileSync(outputPath, css)
-        console.log('crux has popped your css in ' + outputPath)
-      })
-      .catch(e => {
-        console.error(e)
-      })
-  } catch (e) {
-    console.error(e)
-  }
+  const args = argv.run()
+  const variablesPath = args.options.variables
+  const outputPath = args.options.output
+  const minifiedPath = args.options.minify
+  const variables = fs.readFileSync(variablesPath, { encoding: 'utf-8' })
+
+  const generateCss = outputPath 
+    ? generate(JSON.parse(variables), false).then(css => fs.writeFileSync(outputPath, css)).catch(console.error)
+    : Promise.resolve()
+
+  const generateMin = minifiedPath 
+    ? generate(JSON.parse(variables), true).then(css => fs.writeFileSync(minifiedPath, css)).catch(console.error)
+    : Promise.resolve()
+
+  return Promise.all([ generateCss, minifiedPath ])
+    .then(() => console.log('Crux has popped your css in ' + outputPath))
+    .catch(e => console.error(e))
 }
 
 run()

@@ -3,6 +3,8 @@ import * as autoprefixer from 'autoprefixer'
 import * as stylelint from 'stylelint'
 import * as stylelintConfig from 'stylelint-config-standard'
 import * as reporter from 'postcss-reporter'
+import * as postcssFixes from 'postcss-fixes'
+import * as cssnano from 'cssnano'
 
 import {
   generateKeysAndValues,
@@ -425,7 +427,7 @@ export function wordSpacings (vars, media) {
   ].join('')
 }
 
-export default function (vars) {
+export default function (vars, minify) {
   const css = [
     generateCore(vars.media),
     backgroundColors(vars.colors, vars.media),
@@ -453,9 +455,13 @@ export default function (vars) {
     wordSpacings(vars.letterSpacings, vars.media),
   ].join('\n')
 
-  return postcss([
+  const plugins = [
+    postcssFixes({preset: 'safe'}),
     stylelint(stylelintConfig),
     autoprefixer,
     reporter(),
-  ]).process(css)
+    minify ? cssnano() : null,
+  ].filter(a => !!a)
+
+  return postcss(plugins).process(css)
 }

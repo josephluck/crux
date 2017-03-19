@@ -15,7 +15,7 @@
     "test": "ts-node node_modules/.bin/tape ./test/*.spec.ts | tap-spec",
     "dist": "tsc",
     "example:node": "ts-node ./example/node.ts",
-    "example:cli": "npm link && npm run dist && crux --variables=./example/cli.json -o ./example/cli.css",
+    "example:cli": "npm link && npm run dist && crux --variables=./example/cli.json -o ./example/cli.css --minify=./example/cli.min.css",
     "deploy": "npm run dist && npm publish"
   },
   "author": "Joseph Luck",
@@ -32,8 +32,10 @@
   "dependencies": {
     "argv": "0.0.2",
     "autoprefixer": "^6.7.7",
+    "cssnano": "^3.10.0",
     "fs": "0.0.1-security",
     "postcss": "^5.2.16",
+    "postcss-fixes": "^1.4.2",
     "postcss-reporter": "^3.0.0",
     "stylelint": "^7.9.0",
     "stylelint-config-standard": "^16.0.0"

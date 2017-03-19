@@ -86,4 +86,10 @@ const variables = {
   },
 }
 
-generate(variables).then(css => console.log(css))
+console.info('Non minified css: ')
+generate(variables, false).then(css => console.log(css))
+console.info('-----------------------------')
+console.info('-----------------------------')
+console.info('Minified css: ')
+generate(variables, true).then(css => console.log(css))
+console.info('-----------------------------')
