@@ -7,8 +7,7 @@ import * as postcssFixes from 'postcss-fixes'
 import * as cssnano from 'cssnano'
 import * as utils from './utils'
 
-const keys = {
-  ba: 'ba', bt: 'bt', br: 'br', bb: 'bb', bl: 'bl', // core border
+const prefixes = {
   bg: 'bg', // Background
   bc: 'bc', btc: 'btc', brc: 'brc', bbc: 'bbc', blc: 'blc', // Border color
   bs: 'bs', bts: 'bts', brs: 'brs', bbs: 'bbs', bls: 'bls', // Border styles
@@ -38,21 +37,34 @@ const keys = {
   ws: 'ws',
 }
 
-function getKey (key) {
-  return keys[key] ? keys[key] : new Error('Key not found in keys!')
+export interface Breakpoints {
+  [key: string]: {
+    min: string,
+    max: string,
+  }
 }
 
-function generateCore (media) {
+export interface Description {
+  property: string
+  classNames: {
+    [key: string]: string,
+  }
+}
+
+export type VariableValue = string | number
+
+export interface Variables {
+  [variable: string]: VariableValue
+}
+
+export interface VariablesList {
+  [property: string]: Variables
+}
+
+export type Ast = Description[]
+
+function generateCore (): Ast {
   const core = {
-    // border () {
-    //   return [
-    //     `.${getKey(['ba'])} { border: solid 1px; }`,
-    //     `.${getKey(['bt'])} { border-top: solid 1px; }`,
-    //     `.${getKey(['br'])} { border-right: solid 1px; }`,
-    //     `.${getKey(['bb'])} { border-bottom: solid 1px; }`,
-    //     `.${getKey(['bl'])} { border-left: solid 1px; }`,
-    //   ]
-    // },
     borderStyle () {
       const borderStyles = {
         none: 'none',
@@ -227,7 +239,6 @@ function generateCore (media) {
     // },
   }
   return flattenArray([
-    // core.border(),
     core.borderStyle(),
     core.cursor(),
     core.display(),
@@ -240,27 +251,20 @@ function generateCore (media) {
   ])
 }
 
-interface Breakpoints {
-  [key: string]: {
-    min: string,
-    max: string,
-  }
-}
-
-function generate (property, prefix, vars) {
+function generate (property: string, prefix: string, vars: Variables) {
   return {
     property,
-    classNames: utils.generateKeysAndValues(getKey(prefix), vars),
+    classNames: utils.generateKeysAndValues(prefixes[prefix], vars),
   }
 }
 
-export function backgroundColors (vars) {
+export function backgroundColors (vars: Variables) {
   return [
     generate('background', 'bg', vars),
   ]
 }
 
-export function borderColors (vars) {
+export function borderColors (vars: Variables) {
   return [
     generate('border-color', 'bc', vars),
     generate('border-top-color', 'btc', vars),
@@ -270,7 +274,7 @@ export function borderColors (vars) {
   ]
 }
 
-export function borderRadii (vars) {
+export function borderRadii (vars: Variables) {
   return [
     generate('border-radius', 'bra', vars),
     generate('border-top-right-radius', 'btrr', vars),
@@ -280,7 +284,7 @@ export function borderRadii (vars) {
   ]
 }
 
-export function borderWidths (vars) {
+export function borderWidths (vars: Variables) {
   return [
     generate('border-width', 'bw', vars),
     generate('border-top-width', 'btw', vars),
@@ -290,43 +294,43 @@ export function borderWidths (vars) {
   ]
 }
 
-export function colors (vars) {
+export function colors (vars: Variables) {
   return [
     generate('color', 'fc', vars),
   ]
 }
 
-export function fontSize (vars) {
+export function fontSize (vars: Variables) {
   return [
     generate('font-size', 'fs', vars),
   ]
 }
 
-export function fontWeights (vars) {
+export function fontWeights (vars: Variables) {
   return [
     generate('font-weight', 'fw', vars),
   ]
 }
 
-export function letterSpacings (vars) {
+export function letterSpacings (vars: Variables) {
   return [
     generate('letter-spacing', 'ls', vars),
   ]
 }
 
-export function lineHeights (vars) {
+export function lineHeights (vars: Variables) {
   return [
     generate('line-height', 'lh', vars),
   ]
 }
 
-export function heights (vars) {
+export function heights (vars: Variables) {
   return [
     generate('height', 'h', vars),
   ]
 }
 
-export function margins (vars) {
+export function margins (vars: Variables) {
   return [
     generate('margin', 'ma', vars),
     generate('margin-top', 'mt', vars),
@@ -336,55 +340,55 @@ export function margins (vars) {
   ]
 }
 
-export function maxHeights (vars) {
+export function maxHeights (vars: Variables) {
   return [
     generate('max-height', 'maxh', vars),
   ]
 }
 
-export function maxWidths (vars) {
+export function maxWidths (vars: Variables) {
   return [
     generate('max-width', 'maxw', vars),
   ]
 }
 
-export function minHeights (vars) {
+export function minHeights (vars: Variables) {
   return [
     generate('min-height', 'minh', vars),
   ]
 }
 
-export function minWidths (vars) {
+export function minWidths (vars: Variables) {
   return [
     generate('min-width', 'minw', vars),
   ]
 }
 
-export function opacity (vars) {
+export function opacity (vars: Variables) {
   return [
     generate('opacity', 'o', vars),
   ]
 }
 
-export function outlineColors (vars) {
+export function outlineColors (vars: Variables) {
   return [
     generate('outline-color', 'oc', vars),
   ]
 }
 
-export function outlineOffset (vars) {
+export function outlineOffset (vars: Variables) {
   return [
     generate('outline-offset', 'oo', vars),
   ]
 }
 
-export function outlineWidths (vars) {
+export function outlineWidths (vars: Variables) {
   return [
     generate('outline-width', 'ow', vars),
   ]
 }
 
-export function paddings (vars) {
+export function paddings (vars: Variables) {
   return [
     generate('padding', 'p', vars),
     generate('padding-top', 'pt', vars),
@@ -394,7 +398,7 @@ export function paddings (vars) {
   ]
 }
 
-export function topLeftBottomRight (vars) {
+export function topLeftBottomRight (vars: Variables) {
   return [
     generate('top', 'post', vars),
     generate('right', 'posr', vars),
@@ -403,25 +407,25 @@ export function topLeftBottomRight (vars) {
   ]
 }
 
-export function widths (vars) {
+export function widths (vars: Variables) {
   return [
     generate('width', 'w', vars),
   ]
 }
 
-export function wordSpacings (vars) {
+export function wordSpacings (vars: Variables) {
   return [
     generate('word-spacing', 'ws', vars),
   ]
 }
 
-function flattenArray (arr) {
+function flattenArray (arr: any[]): any[] {
   return [].concat.apply([], arr)
 }
 
-export function generateAst (vars) {
+export function generateAst (vars: VariablesList) {
   const ast = flattenArray([
-    // generateCore(vars.media),
+    generateCore(),
     vars.colors ? backgroundColors(vars.colors) : [],
     vars.colors ? borderColors(vars.colors) : [],
     vars.radii ? borderRadii(vars.radii) : [],
@@ -446,7 +450,7 @@ export function generateAst (vars) {
     vars.dimensions ? widths(vars.dimensions) : [],
     vars.letterSpacings ? wordSpacings(vars.letterSpacings) : [],
   ])
-  return flattenArray(ast)
+  return ast
 }
 
 export function copyAst (ast, suffix) {
@@ -483,7 +487,7 @@ export function generateMediaCss (ast, media) {
   }).join('\n')
 }
 
-export function generateCss (vars) {
+export function generateCss (vars: VariablesList) {
   const ast = generateAst(vars)
   const coreCss = astToCss(ast)
   const hoverCss = astToCss(copyAst(ast, ':hover'))
@@ -507,7 +511,7 @@ function process (css, minify) {
   return postcss(plugins).process(css)
 }
 
-export default function (vars, minify) {
+export default function (vars: VariablesList, minify) {
   const css = generateCss(vars)
   return process(css, minify)
 }

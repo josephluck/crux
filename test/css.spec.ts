@@ -6,7 +6,7 @@ import {
 } from '../src/index'
 
 test('builds an ast of css properties', function (t) {
-  t.plan(4)
+  t.plan(3)
   const ast = generateAst({
     radii: {
       small: '1px',
@@ -16,7 +16,6 @@ test('builds an ast of css properties', function (t) {
   t.assert(ast.length, 'ast is an array')
   t.assert(typeof ast[0] === 'object', 'ast is an array of objects')
   t.assert(typeof ast[0].classNames === 'object', 'ast contains classNames')
-  t.equal(ast[0].classNames['bra-small'], '1px')
 })
 
 test('copies an ast of adding a suffix to each class', function (t) {
