@@ -5,12 +5,7 @@ import * as stylelintConfig from 'stylelint-config-standard'
 import * as reporter from 'postcss-reporter'
 import * as postcssFixes from 'postcss-fixes'
 import * as cssnano from 'cssnano'
-
-import {
-  generateKeysAndValues,
-  generateCssAttributes,
-  wrapInMedia,
-} from './utils'
+import * as utils from './utils'
 
 const keys = {
   ba: 'ba', bt: 'bt', br: 'br', bb: 'bb', bl: 'bl', // core border
@@ -49,15 +44,15 @@ function getKey (key) {
 
 function generateCore (media) {
   const core = {
-    border () {
-      return [
-        `.${getKey(['ba'])} { border: solid 1px; }`,
-        `.${getKey(['bt'])} { border-top: solid 1px; }`,
-        `.${getKey(['br'])} { border-right: solid 1px; }`,
-        `.${getKey(['bb'])} { border-bottom: solid 1px; }`,
-        `.${getKey(['bl'])} { border-left: solid 1px; }`,
-      ].join('\n')
-    },
+    // border () {
+    //   return [
+    //     `.${getKey(['ba'])} { border: solid 1px; }`,
+    //     `.${getKey(['bt'])} { border-top: solid 1px; }`,
+    //     `.${getKey(['br'])} { border-right: solid 1px; }`,
+    //     `.${getKey(['bb'])} { border-bottom: solid 1px; }`,
+    //     `.${getKey(['bl'])} { border-left: solid 1px; }`,
+    //   ]
+    // },
     borderStyle () {
       const borderStyles = {
         none: 'none',
@@ -71,12 +66,12 @@ function generateCore (media) {
         outset: 'outset',
       }
       return [
-        generate('border-style', 'bs', borderStyles, media),
-        generate('border-top-style', 'bts', borderStyles, media),
-        generate('border-right-style', 'brs', borderStyles, media),
-        generate('border-bottom-style', 'bbs', borderStyles, media),
-        generate('border-left-style', 'bls', borderStyles, media),
-      ].join('\n')
+        generate('border-style', 'bs', borderStyles),
+        generate('border-top-style', 'bts', borderStyles),
+        generate('border-right-style', 'brs', borderStyles),
+        generate('border-bottom-style', 'bbs', borderStyles),
+        generate('border-left-style', 'bls', borderStyles),
+      ]
     },
     cursor () {
       return [
@@ -115,8 +110,8 @@ function generateCore (media) {
           'zoom-out': 'zoom-out',
           grab: 'grab',
           grabbing: 'grabbing',
-        }, media),
-      ].join('\n')
+        }),
+      ]
     },
     display () {
       return [
@@ -143,8 +138,8 @@ function generateCore (media) {
           inherit: 'inherit',
           initial: 'initial',
           unset: 'unset',
-        }, media),
-      ].join('\n')
+        }),
+      ]
     },
     flex () {
       const flexSizes = {
@@ -173,22 +168,22 @@ function generateCore (media) {
           'self-end': 'self-end',
           left: 'left',
           right: 'right',
-        }, media),
-        generate('flex', 'flex', flexSizes, media),
+        }),
+        generate('flex', 'flex', flexSizes),
         generate('flex-direction', 'flex-direction', {
           row: 'row',
           column: 'column',
           'row-reverse': 'row-reverse',
           'column-reverse': 'column-reverse',
-        }, media),
-        generate('flex-grow', 'flex-grow', flexSizes, media),
-        generate('flex-shrink', 'flex-shrink', flexSizes, media),
+        }),
+        generate('flex-grow', 'flex-grow', flexSizes),
+        generate('flex-shrink', 'flex-shrink', flexSizes),
         generate('flex-wrap', 'flex-wrap', {
           row: 'row',
           column: 'column',
           'row-reverse': 'row-reverse',
           'column-reverse': 'column-reverse',
-        }, media),
+        }),
         generate('justify-content', 'justify-content', {
           center: 'center',
           start: 'start',
@@ -201,16 +196,16 @@ function generateCore (media) {
           'space-around': 'space-around',
           'space-evenly': 'space-evenly',
           stretch: 'stretch',
-        }, media),
-      ].join('\n')
+        }),
+      ]
     },
     float () {
       return [
         generate('float', 'f', {
           r: 'right',
           l: 'left',
-        }, media),
-      ].join('\n')
+        }),
+      ]
     },
     font () {
       return [
@@ -218,31 +213,31 @@ function generateCore (media) {
           normal: 'normal',
           italic: 'italic',
           oblique: 'oblique',
-        }, media),
-      ].join('\n')
+        }),
+      ]
     },
-    overflow () {
-      return ``
-    },
-    text () {
-      return ``
-    },
-    utils () {
-      return ``
-    },
+    // overflow () {
+    //   return ``
+    // },
+    // text () {
+    //   return ``
+    // },
+    // utils () {
+    //   return ``
+    // },
   }
-  return [
-    core.border(),
+  return flattenArray([
+    // core.border(),
     core.borderStyle(),
     core.cursor(),
     core.display(),
     core.flex(),
     core.float(),
     core.font(),
-    core.overflow(),
-    core.text(),
-    core.utils(),
-  ].join('\n')
+    // core.overflow(),
+    // core.text(),
+    // core.utils(),
+  ])
 }
 
 interface Breakpoints {
@@ -252,209 +247,257 @@ interface Breakpoints {
   }
 }
 
-function generate (property, prefix, vars, breakpoints: Breakpoints) {
-  const key = getKey(prefix)
-  const media = Object.keys(breakpoints).map(name => {
-    const point = breakpoints[name]
-    const props = generateKeysAndValues(key, vars, name)
-    const css = generateCssAttributes(property, props, 2)
-    return wrapInMedia(css, point.min, point.max)
+function generate (property, prefix, vars) {
+  return {
+    property,
+    classNames: utils.generateKeysAndValues(getKey(prefix), vars),
+  }
+}
+
+export function backgroundColors (vars) {
+  return [
+    generate('background', 'bg', vars),
+  ]
+}
+
+export function borderColors (vars) {
+  return [
+    generate('border-color', 'bc', vars),
+    generate('border-top-color', 'btc', vars),
+    generate('border-right-color', 'brc', vars),
+    generate('border-bottom-color', 'bbc', vars),
+    generate('border-left-color', 'blc', vars),
+  ]
+}
+
+export function borderRadii (vars) {
+  return [
+    generate('border-radius', 'bra', vars),
+    generate('border-top-right-radius', 'btrr', vars),
+    generate('border-bottom-right-radius', 'bbrr', vars),
+    generate('border-bottom-left-radius', 'bblr', vars),
+    generate('border-top-left-radius', 'btlr', vars),
+  ]
+}
+
+export function borderWidths (vars) {
+  return [
+    generate('border-width', 'bw', vars),
+    generate('border-top-width', 'btw', vars),
+    generate('border-right-width', 'brw', vars),
+    generate('border-bottom-width', 'bbw', vars),
+    generate('border-left-width', 'blw', vars),
+  ]
+}
+
+export function colors (vars) {
+  return [
+    generate('color', 'fc', vars),
+  ]
+}
+
+export function fontSize (vars) {
+  return [
+    generate('font-size', 'fs', vars),
+  ]
+}
+
+export function fontWeights (vars) {
+  return [
+    generate('font-weight', 'fw', vars),
+  ]
+}
+
+export function letterSpacings (vars) {
+  return [
+    generate('letter-spacing', 'ls', vars),
+  ]
+}
+
+export function lineHeights (vars) {
+  return [
+    generate('line-height', 'lh', vars),
+  ]
+}
+
+export function heights (vars) {
+  return [
+    generate('height', 'h', vars),
+  ]
+}
+
+export function margins (vars) {
+  return [
+    generate('margin', 'ma', vars),
+    generate('margin-top', 'mt', vars),
+    generate('margin-right', 'mr', vars),
+    generate('margin-bottom', 'mb', vars),
+    generate('margin-left', 'ml', vars),
+  ]
+}
+
+export function maxHeights (vars) {
+  return [
+    generate('max-height', 'maxh', vars),
+  ]
+}
+
+export function maxWidths (vars) {
+  return [
+    generate('max-width', 'maxw', vars),
+  ]
+}
+
+export function minHeights (vars) {
+  return [
+    generate('min-height', 'minh', vars),
+  ]
+}
+
+export function minWidths (vars) {
+  return [
+    generate('min-width', 'minw', vars),
+  ]
+}
+
+export function opacity (vars) {
+  return [
+    generate('opacity', 'o', vars),
+  ]
+}
+
+export function outlineColors (vars) {
+  return [
+    generate('outline-color', 'oc', vars),
+  ]
+}
+
+export function outlineOffset (vars) {
+  return [
+    generate('outline-offset', 'oo', vars),
+  ]
+}
+
+export function outlineWidths (vars) {
+  return [
+    generate('outline-width', 'ow', vars),
+  ]
+}
+
+export function paddings (vars) {
+  return [
+    generate('padding', 'p', vars),
+    generate('padding-top', 'pt', vars),
+    generate('padding-right', 'pr', vars),
+    generate('padding-bottom', 'pb', vars),
+    generate('padding-left', 'pl', vars),
+  ]
+}
+
+export function topLeftBottomRight (vars) {
+  return [
+    generate('top', 'post', vars),
+    generate('right', 'posr', vars),
+    generate('bottom', 'posb', vars),
+    generate('left', 'posl', vars),
+  ]
+}
+
+export function widths (vars) {
+  return [
+    generate('width', 'w', vars),
+  ]
+}
+
+export function wordSpacings (vars) {
+  return [
+    generate('word-spacing', 'ws', vars),
+  ]
+}
+
+function flattenArray (arr) {
+  return [].concat.apply([], arr)
+}
+
+export function generateAst (vars) {
+  const ast = flattenArray([
+    // generateCore(vars.media),
+    vars.colors ? backgroundColors(vars.colors) : [],
+    vars.colors ? borderColors(vars.colors) : [],
+    vars.radii ? borderRadii(vars.radii) : [],
+    vars.borderWidths ? borderWidths(vars.borderWidths) : [],
+    vars.colors ? colors(vars.colors) : [],
+    vars.fontSizes ? fontSize(vars.fontSizes) : [],
+    vars.fontWeights ? fontWeights(vars.fontWeights) : [],
+    vars.dimensions ? heights(vars.dimensions) : [],
+    vars.letterSpacings ? letterSpacings(vars.letterSpacings) : [],
+    vars.lineHeights ? lineHeights(vars.lineHeights) : [],
+    vars.spacing ? margins(vars.spacing) : [],
+    vars.spacing ? maxHeights(vars.spacing) : [],
+    vars.spacing ? maxWidths(vars.spacing) : [],
+    vars.spacing ? minHeights(vars.spacing) : [],
+    vars.spacing ? minWidths(vars.spacing) : [],
+    vars.opacity ? opacity(vars.opacity) : [],
+    vars.borderWidths ? outlineOffset(vars.borderWidths) : [],
+    vars.colors ? outlineColors(vars.colors) : [],
+    vars.borderWidths ? outlineWidths(vars.borderWidths) : [],
+    vars.spacing ? paddings(vars.spacing) : [],
+    vars.spacing ? topLeftBottomRight(vars.spacing) : [],
+    vars.dimensions ? widths(vars.dimensions) : [],
+    vars.letterSpacings ? wordSpacings(vars.letterSpacings) : [],
+  ])
+  return flattenArray(ast)
+}
+
+export function copyAst (ast, suffix) {
+  return ast.map(property => Object.assign({}, property, {
+    classNames: Object.keys(property.classNames).reduce((prev, curr) => {
+      return Object.assign({}, prev, {
+        [`${curr}${suffix}`]: property.classNames[curr],
+      })
+    }, {}),
+  }))
+}
+
+export function astToCss (ast, indent: number = 0) {
+  const space = Array.from({length: indent + 1}).join(' ')
+  return ast.reduce((prev, prop) => {
+    const classes = Object.keys(prop.classNames).reduce((pre, className) => {
+      return pre.concat(`${space}.${className} { ${prop.property}: ${prop.classNames[className]}; } \n`)
+    }, '')
+    return prev.concat(classes).concat('\n')
+  }, '')
+}
+
+export function generateMediaCss (ast, media) {
+  return Object.keys(media).map(point => {
+    let mediaAst = copyAst(ast, `-${point}`)
+    let min = media[point].min
+    let max = media[point].max
+    let css = astToCss(mediaAst, 2)
+    return [
+      `@media screen${min ? ` and (min-width: ${min})` : ''}${max ? ` and (max-width: ${max})` : ''} {`,
+      `${css}`,
+      `}`,
+      ``,
+    ].join('\n')
   }).join('\n')
+}
+
+export function generateCss (vars) {
+  const ast = generateAst(vars)
+  const coreCss = astToCss(ast)
+  const hoverCss = astToCss(copyAst(ast, ':hover'))
+  const mediaCss = generateMediaCss(ast, vars.media)
+
   return [
-    generateCssAttributes(property, generateKeysAndValues(key, vars)),
-    media,
+    coreCss,
+    hoverCss,
+    mediaCss,
   ].join('\n')
 }
 
-export function backgroundColors (vars, media) {
-  return [
-    generate('background', 'bg', vars, media),
-  ].join('')
-}
-
-export function borderColors (vars, media) {
-  return [
-    generate('border-color', 'bc', vars, media),
-    generate('border-top-color', 'btc', vars, media),
-    generate('border-right-color', 'brc', vars, media),
-    generate('border-bottom-color', 'bbc', vars, media),
-    generate('border-left-color', 'blc', vars, media),
-  ].join('')
-}
-
-export function borderRadii (vars, media) {
-  return [
-    generate('border-radius', 'bra', vars, media),
-    generate('border-top-right-radius', 'btrr', vars, media),
-    generate('border-bottom-right-radius', 'bbrr', vars, media),
-    generate('border-bottom-left-radius', 'bblr', vars, media),
-    generate('border-top-left-radius', 'btlr', vars, media),
-  ].join('')
-}
-
-export function borderWidths (vars, media) {
-  return [
-    generate('border-width', 'bw', vars, media),
-    generate('border-top-width', 'btw', vars, media),
-    generate('border-right-width', 'brw', vars, media),
-    generate('border-bottom-width', 'bbw', vars, media),
-    generate('border-left-width', 'blw', vars, media),
-  ].join('')
-}
-
-export function colors (vars, media) {
-  return [
-    generate('color', 'fc', vars, media),
-  ].join('')
-}
-
-export function fontSize (vars, media) {
-  return [
-    generate('font-size', 'fs', vars, media),
-  ].join('')
-}
-
-export function fontWeights (vars, media) {
-  return [
-    generate('font-weight', 'fw', vars, media),
-  ].join('')
-}
-
-export function letterSpacings (vars, media) {
-  return [
-    generate('letter-spacing', 'ls', vars, media),
-  ].join('')
-}
-
-export function lineHeights (vars, media) {
-  return [
-    generate('line-height', 'lh', vars, media),
-  ].join('')
-}
-
-export function heights (vars, media) {
-  return [
-    generate('height', 'h', vars, media),
-  ].join('')
-}
-
-export function margins (vars, media) {
-  return [
-    generate('margin', 'ma', vars, media),
-    generate('margin-top', 'mt', vars, media),
-    generate('margin-right', 'mr', vars, media),
-    generate('margin-bottom', 'mb', vars, media),
-    generate('margin-left', 'ml', vars, media),
-  ].join('')
-}
-
-export function maxHeights (vars, media) {
-  return [
-    generate('max-height', 'maxh', vars, media),
-  ].join('')
-}
-
-export function maxWidths (vars, media) {
-  return [
-    generate('max-width', 'maxw', vars, media),
-  ].join('')
-}
-
-export function minHeights (vars, media) {
-  return [
-    generate('min-height', 'minh', vars, media),
-  ].join('')
-}
-
-export function minWidths (vars, media) {
-  return [
-    generate('min-width', 'minw', vars, media),
-  ].join('')
-}
-
-export function opacity (vars, media) {
-  return [
-    generate('opacity', 'o', vars, media),
-  ].join('')
-}
-
-export function outlineColors (vars, media) {
-  return [
-    generate('outline-color', 'oc', vars, media),
-  ].join('')
-}
-
-export function outlineOffset (vars, media) {
-  return [
-    generate('outline-offset', 'oo', vars, media),
-  ].join('')
-}
-
-export function outlineWidths (vars, media) {
-  return [
-    generate('outline-width', 'ow', vars, media),
-  ].join('')
-}
-
-export function paddings (vars, media) {
-  return [
-    generate('padding', 'p', vars, media),
-    generate('padding-top', 'pt', vars, media),
-    generate('padding-right', 'pr', vars, media),
-    generate('padding-bottom', 'pb', vars, media),
-    generate('padding-left', 'pl', vars, media),
-  ].join('')
-}
-
-export function topLeftBottomRight (vars, media) {
-  return [
-    generate('top', 'post', vars, media),
-    generate('right', 'posr', vars, media),
-    generate('bottom', 'posb', vars, media),
-    generate('left', 'posl', vars, media),
-  ].join('')
-}
-
-export function widths (vars, media) {
-  return [
-    generate('width', 'w', vars, media),
-  ].join('')
-}
-
-export function wordSpacings (vars, media) {
-  return [
-    generate('word-spacing', 'ws', vars, media),
-  ].join('')
-}
-
-export default function (vars, minify) {
-  const css = [
-    generateCore(vars.media),
-    backgroundColors(vars.colors, vars.media),
-    borderColors(vars.colors, vars.media),
-    borderRadii(vars.radii, vars.media),
-    borderWidths(vars.borderWidths, vars.media),
-    colors(vars.colors, vars.media),
-    fontSize(vars.fontSizes, vars.media),
-    fontWeights(vars.fontWeights, vars.media),
-    heights(vars.dimensions, vars.media),
-    letterSpacings(vars.letterSpacings, vars.media),
-    lineHeights(vars.lineHeights, vars.media),
-    margins(vars.spacing, vars.media),
-    maxHeights(vars.spacing, vars.media),
-    maxWidths(vars.spacing, vars.media),
-    minHeights(vars.spacing, vars.media),
-    minWidths(vars.spacing, vars.media),
-    opacity(vars.opacity, vars.media),
-    outlineOffset(vars.borderWidths, vars.media),
-    outlineColors(vars.colors, vars.media),
-    outlineWidths(vars.borderWidths, vars.media),
-    paddings(vars.spacing, vars.media),
-    topLeftBottomRight(vars.spacing, vars.media),
-    widths(vars.dimensions, vars.media),
-    wordSpacings(vars.letterSpacings, vars.media),
-  ].join('\n')
-
+function process (css, minify) {
   const plugins = [
     postcssFixes({preset: 'safe'}),
     stylelint(stylelintConfig),
@@ -462,6 +505,11 @@ export default function (vars, minify) {
     reporter(),
     minify ? cssnano() : null,
   ].filter(a => !!a)
-
   return postcss(plugins).process(css)
+}
+
+export default function (vars, minify) {
+  const css = generateCss(vars)
+  return Promise.resolve(css)
+  // return process(css, minify)
 }

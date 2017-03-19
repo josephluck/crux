@@ -5,9 +5,9 @@ export function objectToString (obj, indent = 0) {
   }, '')
 }
 
-export function generateKeysAndValues (prefix, variables = {}, suffix?: string) {
+export function generateKeysAndValues (prefix, variables = {}) {
   return Object.keys(variables).reduce((prev, name) => {
-    const key = suffix ? `${prefix}-${name}-${suffix}` : `${prefix}-${name}`
+    const key = `${prefix}-${name}`
     const variable = variables[name]
     return Object.assign({}, prev, {
       [key]: variable,
