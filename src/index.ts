@@ -463,9 +463,9 @@ export function astToCss (ast, indent: number = 0) {
   const space = Array.from({length: indent + 1}).join(' ')
   return ast.reduce((prev, prop) => {
     const classes = Object.keys(prop.classNames).reduce((pre, className) => {
-      return pre.concat(`${space}.${className} { ${prop.property}: ${prop.classNames[className]}; } \n`)
+      return pre.concat(`${space}.${className} { ${prop.property}: ${prop.classNames[className]}; }\n`)
     }, '')
-    return prev.concat(classes).concat('\n')
+    return prev.concat(classes)
   }, '')
 }
 
@@ -477,8 +477,7 @@ export function generateMediaCss (ast, media) {
     let css = astToCss(mediaAst, 2)
     return [
       `@media screen${min ? ` and (min-width: ${min})` : ''}${max ? ` and (max-width: ${max})` : ''} {`,
-      `${css}`,
-      `}`,
+      `${css}}`,
       ``,
     ].join('\n')
   }).join('\n')
@@ -510,6 +509,5 @@ function process (css, minify) {
 
 export default function (vars, minify) {
   const css = generateCss(vars)
-  return Promise.resolve(css)
-  // return process(css, minify)
+  return process(css, minify)
 }
