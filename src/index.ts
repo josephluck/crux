@@ -39,8 +39,8 @@ const prefixes = {
 
 export interface Breakpoints {
   [key: string]: {
-    min: string,
-    max: string,
+    min?: string,
+    max?: string,
   }
 }
 
@@ -58,7 +58,17 @@ export interface Variables {
 }
 
 export interface VariablesList {
-  [property: string]: Variables
+  borderWidths?: Variables
+  colors?: Variables
+  dimensions?: Variables
+  fontSizes?: Variables
+  fontWeights?: Variables
+  letterSpacings?: Variables
+  lineHeights?: Variables
+  opacity?: Variables
+  radii?: Variables
+  spacing?: Variables
+  media?: Breakpoints
 }
 
 export type Ast = Description[]
@@ -258,13 +268,13 @@ function generate (property: string, prefix: string, vars: Variables) {
   }
 }
 
-export function backgroundColors (vars: Variables) {
+export function backgroundColors (vars: Variables): Ast {
   return [
     generate('background', 'bg', vars),
   ]
 }
 
-export function borderColors (vars: Variables) {
+export function borderColors (vars: Variables): Ast {
   return [
     generate('border-color', 'bc', vars),
     generate('border-top-color', 'btc', vars),
@@ -274,7 +284,7 @@ export function borderColors (vars: Variables) {
   ]
 }
 
-export function borderRadii (vars: Variables) {
+export function borderRadii (vars: Variables): Ast {
   return [
     generate('border-radius', 'bra', vars),
     generate('border-top-right-radius', 'btrr', vars),
@@ -284,7 +294,7 @@ export function borderRadii (vars: Variables) {
   ]
 }
 
-export function borderWidths (vars: Variables) {
+export function borderWidths (vars: Variables): Ast {
   return [
     generate('border-width', 'bw', vars),
     generate('border-top-width', 'btw', vars),
@@ -294,43 +304,43 @@ export function borderWidths (vars: Variables) {
   ]
 }
 
-export function colors (vars: Variables) {
+export function colors (vars: Variables): Ast {
   return [
     generate('color', 'fc', vars),
   ]
 }
 
-export function fontSize (vars: Variables) {
+export function fontSize (vars: Variables): Ast {
   return [
     generate('font-size', 'fs', vars),
   ]
 }
 
-export function fontWeights (vars: Variables) {
+export function fontWeights (vars: Variables): Ast {
   return [
     generate('font-weight', 'fw', vars),
   ]
 }
 
-export function letterSpacings (vars: Variables) {
+export function letterSpacings (vars: Variables): Ast {
   return [
     generate('letter-spacing', 'ls', vars),
   ]
 }
 
-export function lineHeights (vars: Variables) {
+export function lineHeights (vars: Variables): Ast {
   return [
     generate('line-height', 'lh', vars),
   ]
 }
 
-export function heights (vars: Variables) {
+export function heights (vars: Variables): Ast {
   return [
     generate('height', 'h', vars),
   ]
 }
 
-export function margins (vars: Variables) {
+export function margins (vars: Variables): Ast {
   return [
     generate('margin', 'ma', vars),
     generate('margin-top', 'mt', vars),
@@ -340,55 +350,55 @@ export function margins (vars: Variables) {
   ]
 }
 
-export function maxHeights (vars: Variables) {
+export function maxHeights (vars: Variables): Ast {
   return [
     generate('max-height', 'maxh', vars),
   ]
 }
 
-export function maxWidths (vars: Variables) {
+export function maxWidths (vars: Variables): Ast {
   return [
     generate('max-width', 'maxw', vars),
   ]
 }
 
-export function minHeights (vars: Variables) {
+export function minHeights (vars: Variables): Ast {
   return [
     generate('min-height', 'minh', vars),
   ]
 }
 
-export function minWidths (vars: Variables) {
+export function minWidths (vars: Variables): Ast {
   return [
     generate('min-width', 'minw', vars),
   ]
 }
 
-export function opacity (vars: Variables) {
+export function opacity (vars: Variables): Ast {
   return [
     generate('opacity', 'o', vars),
   ]
 }
 
-export function outlineColors (vars: Variables) {
+export function outlineColors (vars: Variables): Ast {
   return [
     generate('outline-color', 'oc', vars),
   ]
 }
 
-export function outlineOffset (vars: Variables) {
+export function outlineOffset (vars: Variables): Ast {
   return [
     generate('outline-offset', 'oo', vars),
   ]
 }
 
-export function outlineWidths (vars: Variables) {
+export function outlineWidths (vars: Variables): Ast {
   return [
     generate('outline-width', 'ow', vars),
   ]
 }
 
-export function paddings (vars: Variables) {
+export function paddings (vars: Variables): Ast {
   return [
     generate('padding', 'p', vars),
     generate('padding-top', 'pt', vars),
@@ -398,7 +408,7 @@ export function paddings (vars: Variables) {
   ]
 }
 
-export function topLeftBottomRight (vars: Variables) {
+export function topLeftBottomRight (vars: Variables): Ast {
   return [
     generate('top', 'post', vars),
     generate('right', 'posr', vars),
@@ -407,13 +417,13 @@ export function topLeftBottomRight (vars: Variables) {
   ]
 }
 
-export function widths (vars: Variables) {
+export function widths (vars: Variables): Ast {
   return [
     generate('width', 'w', vars),
   ]
 }
 
-export function wordSpacings (vars: Variables) {
+export function wordSpacings (vars: Variables): Ast {
   return [
     generate('word-spacing', 'ws', vars),
   ]
@@ -423,8 +433,8 @@ function flattenArray (arr: any[]): any[] {
   return [].concat.apply([], arr)
 }
 
-export function generateAst (vars: VariablesList) {
-  const ast = flattenArray([
+export function generateAst (vars: VariablesList): Ast {
+  return flattenArray([
     generateCore(),
     vars.colors ? backgroundColors(vars.colors) : [],
     vars.colors ? borderColors(vars.colors) : [],
@@ -450,10 +460,9 @@ export function generateAst (vars: VariablesList) {
     vars.dimensions ? widths(vars.dimensions) : [],
     vars.letterSpacings ? wordSpacings(vars.letterSpacings) : [],
   ])
-  return ast
 }
 
-export function copyAst (ast, suffix) {
+export function copyAst (ast: Ast, suffix: string): Ast {
   return ast.map(property => Object.assign({}, property, {
     classNames: Object.keys(property.classNames).reduce((prev, curr) => {
       return Object.assign({}, prev, {
@@ -463,7 +472,7 @@ export function copyAst (ast, suffix) {
   }))
 }
 
-export function astToCss (ast, indent: number = 0) {
+export function astToCss (ast: Ast, indent: number = 0): string {
   const space = Array.from({length: indent + 1}).join(' ')
   return ast.reduce((prev, prop) => {
     const classes = Object.keys(prop.classNames).reduce((pre, className) => {
@@ -473,7 +482,7 @@ export function astToCss (ast, indent: number = 0) {
   }, '')
 }
 
-export function generateMediaCss (ast, media) {
+export function generateMediaCss (ast: Ast, media: Breakpoints): string {
   return Object.keys(media).map(point => {
     let mediaAst = copyAst(ast, `-${point}`)
     let min = media[point].min
@@ -487,7 +496,7 @@ export function generateMediaCss (ast, media) {
   }).join('\n')
 }
 
-export function generateCss (vars: VariablesList) {
+export function generateCss (vars: VariablesList): string {
   const ast = generateAst(vars)
   const coreCss = astToCss(ast)
   const hoverCss = astToCss(copyAst(ast, ':hover'))
@@ -500,7 +509,7 @@ export function generateCss (vars: VariablesList) {
   ].join('\n')
 }
 
-function process (css, minify) {
+function process (css: string, minify: boolean) {
   const plugins = [
     postcssFixes({preset: 'safe'}),
     stylelint(stylelintConfig),
@@ -511,7 +520,7 @@ function process (css, minify) {
   return postcss(plugins).process(css)
 }
 
-export default function (vars: VariablesList, minify) {
+export default function (vars: VariablesList, minify: boolean) {
   const css = generateCss(vars)
   return process(css, minify)
 }
