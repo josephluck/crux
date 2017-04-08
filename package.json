@@ -1,6 +1,6 @@
 {
-  "name": "crux",
-  "version": "1.1.0",
+  "name": "crux-css",
+  "version": "1.0.0",
   "description": "generate atomic css",
   "main": "dist/index.js",
   "files": [

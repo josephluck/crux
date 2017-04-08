@@ -28,11 +28,13 @@ const prefixes = {
   maxh: 'maxh', maxw: 'maxw', minh: 'minh', minw: 'minw', // Max / min
   o: 'o',
   oc: 'oc',
+  of: 'of',
   oo: 'oo',
   ow: 'ow',
   p: 'p', pt: 'pt', pr: 'pr', pb: 'pb', pl: 'pl', // Padding
   post: 'post', posr: 'posr', posb: 'posb', posl: 'posl', // Position
   s: 's',
+  tt: 'tt',
   w: 'w',
   ws: 'ws',
 }
@@ -238,12 +240,27 @@ function generateCore (): Ast {
         }),
       ]
     },
-    // overflow () {
-    //   return ``
-    // },
-    // text () {
-    //   return ``
-    // },
+    overflow () {
+      return [
+        generate('overflow', 'of', {
+          hidden: 'hidden',
+          visible: 'visible',
+          scroll: 'scroll',
+          auto: 'auto',
+        }),
+      ]
+    },
+    textTransform () {
+      return [
+        generate('text-transform', 'tt', {
+          uppercase: 'uppercase',
+          capitalize: 'capitalize',
+          lowercase: 'lowercase',
+          none: 'none',
+          'full-width': 'full-width',
+        }),
+      ]
+    },
     // utils () {
     //   return ``
     // },
@@ -255,8 +272,8 @@ function generateCore (): Ast {
     core.flex(),
     core.float(),
     core.font(),
-    // core.overflow(),
-    // core.text(),
+    core.overflow(),
+    core.textTransform(),
     // core.utils(),
   ])
 }
