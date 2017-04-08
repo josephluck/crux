@@ -583,8 +583,8 @@ function generatePseudoCss (ast: Ast, pseudoClasses: PseudoClasses): string {
 export function generateCss (vars: VariablesList): string {
   const ast = generateAst(vars)
   const coreCss = astToCss(ast)
-  const pseudoCss = generatePseudoCss(ast, vars.pseudoClasses)
-  const mediaCss = generateMediaCss(ast, vars.media)
+  const pseudoCss = generatePseudoCss(ast, vars.pseudoClasses || {})
+  const mediaCss = generateMediaCss(ast, vars.media || {})
 
   return [
     coreCss,
