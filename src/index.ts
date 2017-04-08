@@ -58,6 +58,10 @@ export interface Breakpoints {
   }
 }
 
+export interface PseudoClasses {
+  [key: string]: string
+}
+
 export interface ClassNames {
   [key: string]: string,
 }
@@ -91,6 +95,7 @@ export interface VariablesList {
   radii?: Variables
   spacing?: Variables
   media?: Breakpoints
+  pseudoClasses?: PseudoClasses
 }
 
 export type Ast = Description[]
@@ -569,16 +574,21 @@ export function generateMediaCss (ast: Ast, media: Breakpoints): string {
   }).join('\n')
 }
 
+function generatePseudoCss (ast: Ast, pseudoClasses: PseudoClasses): string {
+  return Object.keys(pseudoClasses).reduce((prev, key) => {
+    return astToCss(copyAst(ast, `-${pseudoClasses[key]}:${key}`))
+  }, '')
+}
+
 export function generateCss (vars: VariablesList): string {
   const ast = generateAst(vars)
-  console.log(ast)
   const coreCss = astToCss(ast)
-  const hoverCss = astToCss(copyAst(ast, ':hover'))
+  const pseudoCss = generatePseudoCss(ast, vars.pseudoClasses)
   const mediaCss = generateMediaCss(ast, vars.media)
 
   return [
     coreCss,
-    hoverCss,
+    pseudoCss,
     mediaCss,
   ].join('\n')
 }
