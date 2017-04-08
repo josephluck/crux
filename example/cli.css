@@ -1,3 +1,8 @@
+.ba { border: solid 1px; }
+.bt { border-top: solid 1px; }
+.br { border-right: solid 1px; }
+.bb { border-bottom: solid 1px; }
+.bl { border-left: solid 1px; }
 .bs-none { border-style: none; }
 .bs-dotted { border-style: dotted; }
 .bs-dashed { border-style: dashed; }
@@ -452,6 +457,11 @@
 .ws-3 { word-spacing: 3px; }
 .ws-4 { word-spacing: 4px; }
 
+.ba:hover { border: solid 1px; }
+.bt:hover { border-top: solid 1px; }
+.br:hover { border-right: solid 1px; }
+.bb:hover { border-bottom: solid 1px; }
+.bl:hover { border-left: solid 1px; }
 .bs-none:hover { border-style: none; }
 .bs-dotted:hover { border-style: dotted; }
 .bs-dashed:hover { border-style: dashed; }
@@ -907,6 +917,11 @@
 .ws-4:hover { word-spacing: 4px; }
 
 @media screen and (max-width: 30em) {
+  .ba-ns { border: solid 1px; }
+  .bt-ns { border-top: solid 1px; }
+  .br-ns { border-right: solid 1px; }
+  .bb-ns { border-bottom: solid 1px; }
+  .bl-ns { border-left: solid 1px; }
   .bs-none-ns { border-style: none; }
   .bs-dotted-ns { border-style: dotted; }
   .bs-dashed-ns { border-style: dashed; }
@@ -1363,6 +1378,11 @@
 }
 
 @media screen and (min-width: 30em) and (max-width: 60em) {
+  .ba-m { border: solid 1px; }
+  .bt-m { border-top: solid 1px; }
+  .br-m { border-right: solid 1px; }
+  .bb-m { border-bottom: solid 1px; }
+  .bl-m { border-left: solid 1px; }
   .bs-none-m { border-style: none; }
   .bs-dotted-m { border-style: dotted; }
   .bs-dashed-m { border-style: dashed; }
@@ -1819,6 +1839,11 @@
 }
 
 @media screen and (min-width: 60em) {
+  .ba-l { border: solid 1px; }
+  .bt-l { border-top: solid 1px; }
+  .br-l { border-right: solid 1px; }
+  .bb-l { border-bottom: solid 1px; }
+  .bl-l { border-left: solid 1px; }
   .bs-none-l { border-style: none; }
   .bs-dotted-l { border-style: dotted; }
   .bs-dashed-l { border-style: dashed; }

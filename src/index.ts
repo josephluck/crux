@@ -18,7 +18,7 @@ const stylelintConfig = {
   },
 }
 
-const prefixes = {
+const prefixes: Prefixes = {
   bg: 'bg', // Background
   ba: 'ba', bl: 'bl', br: 'br', bt: 'bt', bb: 'bb',
   bc: 'bc', btc: 'btc', brc: 'brc', bbc: 'bbc', blc: 'blc', // Border color
@@ -58,17 +58,23 @@ export interface Breakpoints {
   }
 }
 
+export interface ClassNames {
+  [key: string]: string,
+}
+
 export interface Description {
-  property: string | string[]
-  classNames: {
-    [key: string]: string,
-  }
+  property: string[]
+  classNames: ClassNames
 }
 
 export type VariableValue = string | number
 
 export interface MultipleVariables {
   [variable: string]: VariableValue
+}
+
+export interface Prefixes {
+  [prefix: string]: string
 }
 
 export type Variables = MultipleVariables | string
@@ -90,16 +96,23 @@ export interface VariablesList {
 export type Ast = Description[]
 
 function generateCore (): Ast {
+  console.log([
+    generate('border', 'ba', 'solid 1px'),
+    generate('border-top', 'bt', 'solid 1px'),
+    generate('border-right', 'br', 'solid 1px'),
+    generate('border-bottom', 'bb', 'solid 1px'),
+    generate('border-left', 'bl', 'solid 1px'),
+  ])
   const core = {
-    // border () {
-    //   return [
-    //     generate('border', 'ba', 'solid 1px'),
-    //     generate('border-top', 'bt', 'solid 1px'),
-    //     generate('border-right', 'br', 'solid 1px'),
-    //     generate('border-bottom', 'bb', 'solid 1px'),
-    //     generate('border-left', 'bl', 'solid 1px'),
-    //   ]
-    // },
+    border () {
+      return [
+        generate('border', 'ba', 'solid 1px'),
+        generate('border-top', 'bt', 'solid 1px'),
+        generate('border-right', 'br', 'solid 1px'),
+        generate('border-bottom', 'bb', 'solid 1px'),
+        generate('border-left', 'bl', 'solid 1px'),
+      ]
+    },
     borderStyle () {
       const borderStyles = {
         none: 'none',
@@ -289,6 +302,7 @@ function generateCore (): Ast {
     // },
   }
   return flattenArray([
+    core.border(),
     core.borderStyle(),
     core.cursor(),
     core.display(),
@@ -299,14 +313,6 @@ function generateCore (): Ast {
     core.textTransform(),
     // core.utils(),
   ])
-}
-
-function generate (property: string | string[], prefix: string, vars: Variables) {
-  return {
-    type: typeof property === 'string' ? 'single' : 'multiple',
-    property,
-    classNames: utils.generateKeysAndValues(prefixes[prefix], vars),
-  }
 }
 
 export function backgroundColors (vars: Variables): Ast {
@@ -474,6 +480,17 @@ export function wordSpacings (vars: Variables): Ast {
   ]
 }
 
+function generate (
+  property: string | string[],
+  prefix: string,
+  vars: Variables,
+): Description {
+  return {
+    property: typeof property === 'string' ? [property] : property,
+    classNames: utils.generateKeysAndValues(prefixes[prefix], vars),
+  }
+}
+
 function flattenArray (arr: any[]): any[] {
   return [].concat.apply([], arr)
 }
@@ -517,16 +534,23 @@ export function copyAst (ast: Ast, suffix: string): Ast {
   }))
 }
 
+function generateCssForClassNames (
+  classNames: ClassNames,
+  properties: string[],
+  space: string,
+) {
+  return Object.keys(classNames).reduce((pre, className) => {
+    const inner = properties.reduce((previous, property) => {
+      return previous.concat(`${property}: ${classNames[className]}; `)
+    }, '')
+    return pre.concat(`${space}.${className} { ${inner }}\n`)
+  }, '')
+}
+
 export function astToCss (ast: Ast, indent: number = 0): string {
   const space = Array.from({length: indent + 1}).join(' ')
   return ast.reduce((prev, prop) => {
-    const classes = Object.keys(prop.classNames).reduce((pre, className) => {
-      const properties = typeof prop.property === 'string' ? [prop.property] : prop.property
-      const inner = properties.reduce((previous, property) => {
-        return previous.concat(`${property}: ${prop.classNames[className]}; `)
-      }, '')
-      return pre.concat(`${space}.${className} { ${inner }}\n`)
-    }, '')
+    const classes = generateCssForClassNames(prop.classNames, prop.property, space)
     return prev.concat(classes)
   }, '')
 }
@@ -547,6 +571,7 @@ export function generateMediaCss (ast: Ast, media: Breakpoints): string {
 
 export function generateCss (vars: VariablesList): string {
   const ast = generateAst(vars)
+  console.log(ast)
   const coreCss = astToCss(ast)
   const hoverCss = astToCss(copyAst(ast, ':hover'))
   const mediaCss = generateMediaCss(ast, vars.media)

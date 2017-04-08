@@ -9,6 +9,9 @@
 		"declaration": true,
 		"outDir": "dist",
 		"sourceMap": false,
+		"noUnusedLocals": true,
+		"skipDefaultLibCheck": true,
+		"skipLibCheck": true,
 		"lib": [
 			"es6",
 			"es7",
