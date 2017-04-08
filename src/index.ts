@@ -1,14 +1,26 @@
 import * as postcss from 'postcss'
 import * as autoprefixer from 'autoprefixer'
 import * as stylelint from 'stylelint'
-import * as stylelintConfig from 'stylelint-config-standard'
+import * as standardStyleLint from 'stylelint-config-standard'
 import * as reporter from 'postcss-reporter'
 import * as postcssFixes from 'postcss-fixes'
 import * as cssnano from 'cssnano'
 import * as utils from './utils'
 
+const stylelintConfig = {
+  ...standardStyleLint,
+  rules: {
+    ...standardStyleLint.rules,
+    'declaration-block-single-line-max-declarations': 4,
+    'declaration-block-no-redundant-longhand-properties': [true, {
+      ignoreShorthands: ['padding', 'margin'],
+    }],
+  },
+}
+
 const prefixes = {
   bg: 'bg', // Background
+  ba: 'ba', bl: 'bl', br: 'br', bt: 'bt', bb: 'bb',
   bc: 'bc', btc: 'btc', brc: 'brc', bbc: 'bbc', blc: 'blc', // Border color
   bs: 'bs', bts: 'bts', brs: 'brs', bbs: 'bbs', bls: 'bls', // Border styles
   bra: 'bra', btrr: 'btrr', bbrr: 'bbrr', bblr: 'bblr', btlr: 'btlr', // Border radii
@@ -24,14 +36,14 @@ const prefixes = {
   ls: 'ls',
   lh: 'lh',
   h: 'h',
-  ma: 'ma', mt: 'mt', mr: 'mr', mb: 'mb', ml: 'ml', // Margin
+  mt: 'mt', mr: 'mr', mb: 'mb', ml: 'ml', mh: 'mh', mv: 'mv', ma: 'ma',  // Margin
   maxh: 'maxh', maxw: 'maxw', minh: 'minh', minw: 'minw', // Max / min
   o: 'o',
   oc: 'oc',
   of: 'of',
   oo: 'oo',
   ow: 'ow',
-  p: 'p', pt: 'pt', pr: 'pr', pb: 'pb', pl: 'pl', // Padding
+  pt: 'pt', pr: 'pr', pb: 'pb', pl: 'pl', ph: 'ph', pv: 'pv', pa: 'pa', // Padding
   post: 'post', posr: 'posr', posb: 'posb', posl: 'posl', // Position
   s: 's',
   tt: 'tt',
@@ -47,7 +59,7 @@ export interface Breakpoints {
 }
 
 export interface Description {
-  property: string
+  property: string | string[]
   classNames: {
     [key: string]: string,
   }
@@ -55,9 +67,11 @@ export interface Description {
 
 export type VariableValue = string | number
 
-export interface Variables {
+export interface MultipleVariables {
   [variable: string]: VariableValue
 }
+
+export type Variables = MultipleVariables | string
 
 export interface VariablesList {
   borderWidths?: Variables
@@ -77,6 +91,15 @@ export type Ast = Description[]
 
 function generateCore (): Ast {
   const core = {
+    // border () {
+    //   return [
+    //     generate('border', 'ba', 'solid 1px'),
+    //     generate('border-top', 'bt', 'solid 1px'),
+    //     generate('border-right', 'br', 'solid 1px'),
+    //     generate('border-bottom', 'bb', 'solid 1px'),
+    //     generate('border-left', 'bl', 'solid 1px'),
+    //   ]
+    // },
     borderStyle () {
       const borderStyles = {
         none: 'none',
@@ -278,8 +301,9 @@ function generateCore (): Ast {
   ])
 }
 
-function generate (property: string, prefix: string, vars: Variables) {
+function generate (property: string | string[], prefix: string, vars: Variables) {
   return {
+    type: typeof property === 'string' ? 'single' : 'multiple',
     property,
     classNames: utils.generateKeysAndValues(prefixes[prefix], vars),
   }
@@ -359,11 +383,13 @@ export function heights (vars: Variables): Ast {
 
 export function margins (vars: Variables): Ast {
   return [
-    generate('margin', 'ma', vars),
     generate('margin-top', 'mt', vars),
     generate('margin-right', 'mr', vars),
     generate('margin-bottom', 'mb', vars),
     generate('margin-left', 'ml', vars),
+    generate(['margin-left', 'margin-right'], 'mh', vars),
+    generate(['margin-top', 'margin-bottom'], 'mv', vars),
+    generate(['margin-left', 'margin-right', 'margin-top', 'margin-bottom'], 'ma', vars),
   ]
 }
 
@@ -417,11 +443,13 @@ export function outlineWidths (vars: Variables): Ast {
 
 export function paddings (vars: Variables): Ast {
   return [
-    generate('padding', 'p', vars),
     generate('padding-top', 'pt', vars),
     generate('padding-right', 'pr', vars),
     generate('padding-bottom', 'pb', vars),
     generate('padding-left', 'pl', vars),
+    generate(['padding-left', 'padding-right'], 'ph', vars),
+    generate(['padding-top', 'padding-bottom'], 'pv', vars),
+    generate(['padding-left', 'padding-right', 'padding-top', 'padding-bottom'], 'pa', vars),
   ]
 }
 
@@ -493,7 +521,11 @@ export function astToCss (ast: Ast, indent: number = 0): string {
   const space = Array.from({length: indent + 1}).join(' ')
   return ast.reduce((prev, prop) => {
     const classes = Object.keys(prop.classNames).reduce((pre, className) => {
-      return pre.concat(`${space}.${className} { ${prop.property}: ${prop.classNames[className]}; }\n`)
+      const properties = typeof prop.property === 'string' ? [prop.property] : prop.property
+      const inner = properties.reduce((previous, property) => {
+        return previous.concat(`${property}: ${prop.classNames[className]}; `)
+      }, '')
+      return pre.concat(`${space}.${className} { ${inner }}\n`)
     }, '')
     return prev.concat(classes)
   }, '')
