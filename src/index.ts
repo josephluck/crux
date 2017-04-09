@@ -44,9 +44,11 @@ const prefixes: Prefixes = {
   oo: 'oo',
   ow: 'ow',
   pt: 'pt', pr: 'pr', pb: 'pb', pl: 'pl', ph: 'ph', pv: 'pv', pa: 'pa', // Padding
+  pos: 'pos',
   post: 'post', posr: 'posr', posb: 'posb', posl: 'posl', // Position
   s: 's',
   tt: 'tt',
+  ta: 'ta',
   w: 'w',
   ws: 'ws',
 }
@@ -101,13 +103,6 @@ export interface VariablesList {
 export type Ast = Description[]
 
 function generateCore (): Ast {
-  console.log([
-    generate('border', 'ba', 'solid 1px'),
-    generate('border-top', 'bt', 'solid 1px'),
-    generate('border-right', 'br', 'solid 1px'),
-    generate('border-bottom', 'bb', 'solid 1px'),
-    generate('border-left', 'bl', 'solid 1px'),
-  ])
   const core = {
     border () {
       return [
@@ -291,7 +286,17 @@ function generateCore (): Ast {
         }),
       ]
     },
-    textTransform () {
+    position () {
+      return [
+        generate('position', 'pos', {
+          relative: 'relative',
+          absolute: 'absolute',
+          fixed: 'fixed',
+          static: 'static',
+        }),
+      ]
+    },
+    text () {
       return [
         generate('text-transform', 'tt', {
           uppercase: 'uppercase',
@@ -299,6 +304,12 @@ function generateCore (): Ast {
           lowercase: 'lowercase',
           none: 'none',
           'full-width': 'full-width',
+        }),
+        generate('text-align', 'ta', {
+          l: 'left',
+          r: 'right',
+          c: 'center',
+          justify: 'justify',
         }),
       ]
     },
@@ -315,7 +326,8 @@ function generateCore (): Ast {
     core.float(),
     core.font(),
     core.overflow(),
-    core.textTransform(),
+    core.position(),
+    core.text(),
     // core.utils(),
   ])
 }
