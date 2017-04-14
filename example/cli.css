@@ -176,11 +176,19 @@
 .of-visible { overflow: visible; }
 .of-scroll { overflow: scroll; }
 .of-auto { overflow: auto; }
+.pos-relative { position: relative; }
+.pos-absolute { position: absolute; }
+.pos-fixed { position: fixed; }
+.pos-static { position: static; }
 .tt-uppercase { text-transform: uppercase; }
 .tt-capitalize { text-transform: capitalize; }
 .tt-lowercase { text-transform: lowercase; }
 .tt-none { text-transform: none; }
 .tt-full-width { text-transform: full-width; }
+.ta-l { text-align: left; }
+.ta-r { text-align: right; }
+.ta-c { text-align: center; }
+.ta-justify { text-align: justify; }
 .bg-primary { background: red; }
 .bg-secondary { background: blue; }
 .bc-primary { border-color: red; }
@@ -225,6 +233,8 @@
 .blw-large { border-left-width: 3px; }
 .fc-primary { color: red; }
 .fc-secondary { color: blue; }
+.ff-copy { font-family: Helvetica, sans-serif; }
+.ff-heading { font-family: Cursive; }
 .fs-small { font-size: 0.8rem; }
 .fs-medium { font-size: 1rem; }
 .fs-large { font-size: 1.5rem; }
@@ -635,11 +645,19 @@
 .of-visible-a:active { overflow: visible; }
 .of-scroll-a:active { overflow: scroll; }
 .of-auto-a:active { overflow: auto; }
+.pos-relative-a:active { position: relative; }
+.pos-absolute-a:active { position: absolute; }
+.pos-fixed-a:active { position: fixed; }
+.pos-static-a:active { position: static; }
 .tt-uppercase-a:active { text-transform: uppercase; }
 .tt-capitalize-a:active { text-transform: capitalize; }
 .tt-lowercase-a:active { text-transform: lowercase; }
 .tt-none-a:active { text-transform: none; }
 .tt-full-width-a:active { text-transform: full-width; }
+.ta-l-a:active { text-align: left; }
+.ta-r-a:active { text-align: right; }
+.ta-c-a:active { text-align: center; }
+.ta-justify-a:active { text-align: justify; }
 .bg-primary-a:active { background: red; }
 .bg-secondary-a:active { background: blue; }
 .bc-primary-a:active { border-color: red; }
@@ -684,6 +702,8 @@
 .blw-large-a:active { border-left-width: 3px; }
 .fc-primary-a:active { color: red; }
 .fc-secondary-a:active { color: blue; }
+.ff-copy-a:active { font-family: Helvetica, sans-serif; }
+.ff-heading-a:active { font-family: Cursive; }
 .fs-small-a:active { font-size: 0.8rem; }
 .fs-medium-a:active { font-size: 1rem; }
 .fs-large-a:active { font-size: 1.5rem; }
@@ -1095,11 +1115,19 @@
   .of-visible-ns { overflow: visible; }
   .of-scroll-ns { overflow: scroll; }
   .of-auto-ns { overflow: auto; }
+  .pos-relative-ns { position: relative; }
+  .pos-absolute-ns { position: absolute; }
+  .pos-fixed-ns { position: fixed; }
+  .pos-static-ns { position: static; }
   .tt-uppercase-ns { text-transform: uppercase; }
   .tt-capitalize-ns { text-transform: capitalize; }
   .tt-lowercase-ns { text-transform: lowercase; }
   .tt-none-ns { text-transform: none; }
   .tt-full-width-ns { text-transform: full-width; }
+  .ta-l-ns { text-align: left; }
+  .ta-r-ns { text-align: right; }
+  .ta-c-ns { text-align: center; }
+  .ta-justify-ns { text-align: justify; }
   .bg-primary-ns { background: red; }
   .bg-secondary-ns { background: blue; }
   .bc-primary-ns { border-color: red; }
@@ -1144,6 +1172,8 @@
   .blw-large-ns { border-left-width: 3px; }
   .fc-primary-ns { color: red; }
   .fc-secondary-ns { color: blue; }
+  .ff-copy-ns { font-family: Helvetica, sans-serif; }
+  .ff-heading-ns { font-family: Cursive; }
   .fs-small-ns { font-size: 0.8rem; }
   .fs-medium-ns { font-size: 1rem; }
   .fs-large-ns { font-size: 1.5rem; }
@@ -1556,11 +1586,19 @@
   .of-visible-m { overflow: visible; }
   .of-scroll-m { overflow: scroll; }
   .of-auto-m { overflow: auto; }
+  .pos-relative-m { position: relative; }
+  .pos-absolute-m { position: absolute; }
+  .pos-fixed-m { position: fixed; }
+  .pos-static-m { position: static; }
   .tt-uppercase-m { text-transform: uppercase; }
   .tt-capitalize-m { text-transform: capitalize; }
   .tt-lowercase-m { text-transform: lowercase; }
   .tt-none-m { text-transform: none; }
   .tt-full-width-m { text-transform: full-width; }
+  .ta-l-m { text-align: left; }
+  .ta-r-m { text-align: right; }
+  .ta-c-m { text-align: center; }
+  .ta-justify-m { text-align: justify; }
   .bg-primary-m { background: red; }
   .bg-secondary-m { background: blue; }
   .bc-primary-m { border-color: red; }
@@ -1605,6 +1643,8 @@
   .blw-large-m { border-left-width: 3px; }
   .fc-primary-m { color: red; }
   .fc-secondary-m { color: blue; }
+  .ff-copy-m { font-family: Helvetica, sans-serif; }
+  .ff-heading-m { font-family: Cursive; }
   .fs-small-m { font-size: 0.8rem; }
   .fs-medium-m { font-size: 1rem; }
   .fs-large-m { font-size: 1.5rem; }
@@ -2017,11 +2057,19 @@
   .of-visible-l { overflow: visible; }
   .of-scroll-l { overflow: scroll; }
   .of-auto-l { overflow: auto; }
+  .pos-relative-l { position: relative; }
+  .pos-absolute-l { position: absolute; }
+  .pos-fixed-l { position: fixed; }
+  .pos-static-l { position: static; }
   .tt-uppercase-l { text-transform: uppercase; }
   .tt-capitalize-l { text-transform: capitalize; }
   .tt-lowercase-l { text-transform: lowercase; }
   .tt-none-l { text-transform: none; }
   .tt-full-width-l { text-transform: full-width; }
+  .ta-l-l { text-align: left; }
+  .ta-r-l { text-align: right; }
+  .ta-c-l { text-align: center; }
+  .ta-justify-l { text-align: justify; }
   .bg-primary-l { background: red; }
   .bg-secondary-l { background: blue; }
   .bc-primary-l { border-color: red; }
@@ -2066,6 +2114,8 @@
   .blw-large-l { border-left-width: 3px; }
   .fc-primary-l { color: red; }
   .fc-secondary-l { color: blue; }
+  .ff-copy-l { font-family: Helvetica, sans-serif; }
+  .ff-heading-l { font-family: Cursive; }
   .fs-small-l { font-size: 0.8rem; }
   .fs-medium-l { font-size: 1rem; }
   .fs-large-l { font-size: 1.5rem; }

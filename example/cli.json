@@ -18,6 +18,10 @@
       "7": "64rem",
       "8": "128rem"
    },
+   "fontFamilies": {  
+      "copy": "Helvetica, sans-serif",
+      "heading": "Cursive"
+   },
    "fontSizes": {  
       "small": "0.8rem",
       "medium": "1rem",

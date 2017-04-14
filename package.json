@@ -1,6 +1,6 @@
 {
   "name": "crux-css",
-  "version": "2.0.2",
+  "version": "2.0.5",
   "description": "generate atomic css",
   "main": "dist/index.js",
   "files": [
@@ -15,7 +15,7 @@
     "test": "ts-node node_modules/.bin/tape ./test/*.spec.ts | tap-spec",
     "dist": "tsc",
     "example:node": "ts-node ./example/node.ts",
-    "example:cli": "npm run dist && crux --variables=./example/cli.json -o ./example/cli.css --minify=./example/cli.min.css",
+    "example:cli": "npm run dist && crux --variables=./example/cli.json -o ./example/cli.css",
     "deploy": "npm run dist && npm publish"
   },
   "author": "Joseph Luck",

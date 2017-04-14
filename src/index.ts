@@ -30,6 +30,7 @@ const prefixes: Prefixes = {
   f: 'f',
   fc: 'fc',
   fd: 'fd',
+  ff: 'ff',
   'align-items': 'align-items', flex: 'flex', 'flex-direction': 'flex-direction', 'flex-grow': 'flex-grow', 'flex-shrink': 'flex-shrink', 'flex-wrap': 'flex-wrap', 'justify-content': 'justify-content', // Flex
   fs: 'fs',
   fw: 'fw',
@@ -89,6 +90,7 @@ export interface VariablesList {
   borderWidths?: Variables
   colors?: Variables
   dimensions?: Variables
+  fontFamilies?: Variables
   fontSizes?: Variables
   fontWeights?: Variables
   letterSpacings?: Variables
@@ -239,10 +241,9 @@ function generateCore (): Ast {
         generate('flex-grow', 'flex-grow', flexSizes),
         generate('flex-shrink', 'flex-shrink', flexSizes),
         generate('flex-wrap', 'flex-wrap', {
-          row: 'row',
-          column: 'column',
-          'row-reverse': 'row-reverse',
-          'column-reverse': 'column-reverse',
+          wrap: 'wrap',
+          nowrap: 'nowrap',
+          'wrap-reverse': 'wrap-reverse'
         }),
         generate('justify-content', 'justify-content', {
           center: 'center',
@@ -371,6 +372,12 @@ export function borderWidths (vars: Variables): Ast {
 export function colors (vars: Variables): Ast {
   return [
     generate('color', 'fc', vars),
+  ]
+}
+
+export function fontFamilies (vars: Variables): Ast {
+  return [
+    generate('font-family', 'ff', vars),
   ]
 }
 
@@ -520,6 +527,7 @@ export function generateAst (vars: VariablesList): Ast {
     vars.radii ? borderRadii(vars.radii) : [],
     vars.borderWidths ? borderWidths(vars.borderWidths) : [],
     vars.colors ? colors(vars.colors) : [],
+    vars.fontFamilies ? fontFamilies(vars.fontFamilies) : [],
     vars.fontSizes ? fontSize(vars.fontSizes) : [],
     vars.fontWeights ? fontWeights(vars.fontWeights) : [],
     vars.dimensions ? heights(vars.dimensions) : [],
