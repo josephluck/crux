@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const argv = require('argv')
-const generate = require('../').default
+const generate = require('../lib').default
 
 argv.option({
   name: 'variables',
