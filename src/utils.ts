@@ -30,3 +30,7 @@ export function generateKeysAndValues (
     }, {})
   }
 }
+
+export function isNode () {
+  return typeof window === undefined
+}

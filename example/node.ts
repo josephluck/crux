@@ -1,4 +1,4 @@
-import generate from '../src/index'
+import generate from '../src'
 
 const variables = {
   borderWidths: {
@@ -86,10 +86,33 @@ const variables = {
   },
 }
 
-console.info('Non minified css: ')
-generate(variables, false).then(css => console.log(css))
+console.info('Boom! Some full-fat CSS for you: ')
+console.log(generate(variables, {
+  minify: false,
+  includeCore: false,
+  prefixes: {
+    background: 'background',
+    'border-top': 'border-t',
+    'border-color': 'b--',
+  },
+}))
 console.info('-----------------------------')
-console.info('-----------------------------')
-console.info('Minified css: ')
-generate(variables, true).then(css => console.log(css))
+
+console.info('Boom! Some diet CSS for you: ')
+console.log(generate({
+  colors: {
+    blue: 'rgba(0, 0, 255, 1)',
+  },
+  pseudoClasses: {
+    hover: 'h',
+  }
+}, {
+  minify: false,
+  includeCore: false,
+  prefixes: {
+    background: 'background',
+    'border-top': 'border-t',
+    'border-color': 'b--',
+  },
+}))
 console.info('-----------------------------')
