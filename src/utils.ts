@@ -32,5 +32,5 @@ export function generateKeysAndValues (
 }
 
 export function isNode () {
-  return typeof window === undefined
+  return typeof window === 'undefined'
 }
