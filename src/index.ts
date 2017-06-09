@@ -1,7 +1,3 @@
-import * as postcss from 'postcss'
-import * as autoprefixer from 'autoprefixer'
-import * as postcssFixes from 'postcss-fixes'
-import * as cssnano from 'cssnano'
 import * as utils from './utils'
 
 export interface PrefixList {
@@ -754,26 +750,10 @@ export function generateCss (vars: VariablesList, prefixes: PrefixList, includeC
 
 export interface Opts {
   minify?: boolean
-  plugins?: any[]
   includeCore?: boolean
   prefixes?: PrefixList
 }
 
-function process (css: string, opts: Opts) {
-  const plugins = [
-    postcssFixes({preset: 'safe'}),
-    autoprefixer,
-    opts.minify ? cssnano() : null,
-    ...opts.plugins,
-  ].filter(a => !!a)
-  return postcss(plugins).process(css)
-}
-
 export default function (vars: VariablesList, opts: Opts) {
-  const css = generateCss(vars, opts.prefixes, opts.includeCore)
-  if (utils.isNode()) {
-    return process(css, opts)
-  } else {
-    return css
-  }
+  return generateCss(vars, opts.prefixes, opts.includeCore)
 }

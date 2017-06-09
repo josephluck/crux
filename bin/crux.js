@@ -34,13 +34,13 @@ function run () {
   const options = args.options.parameters
   const variables = fs.readFileSync(variablesPath, { encoding: 'utf-8' })
 
-  const generateCss = outputPath 
-    ? generate(JSON.parse(variables), options).then(css => fs.writeFileSync(outputPath, css)).catch(console.error)
-    : Promise.resolve()
-
-  return generateCss
-    .then(() => console.log('Crux has popped your css in ' + outputPath))
-    .catch(e => console.error(e))
+  const css = generate(JSON.parse(variables) || {}, options || {})
+  try {
+    fs.writeFileSync(outputPath, css)
+    console.log('Boom! Your css has been written to ' + outputPath)
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 run()

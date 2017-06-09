@@ -1,4 +1,3 @@
-import * as postcss from 'postcss';
 export interface PrefixList {
     'background'?: string;
     'border-all'?: string;
@@ -151,8 +150,7 @@ export declare function generateMediaCss(ast: Ast, media: Breakpoints): string;
 export declare function generateCss(vars: VariablesList, prefixes: PrefixList, includeCore: boolean): string;
 export interface Opts {
     minify?: boolean;
-    plugins?: any[];
     includeCore?: boolean;
     prefixes?: PrefixList;
 }
-export default function (vars: VariablesList, opts: Opts): string | postcss.LazyResult;
+export default function (vars: VariablesList, opts: Opts): string;
