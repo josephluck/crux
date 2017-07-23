@@ -1,6 +1,6 @@
 {
   "name": "crux-css",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "generate atomic css",
   "main": "lib/index.js",
   "files": [

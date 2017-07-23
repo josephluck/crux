@@ -26,15 +26,20 @@ argv.option({
   example: "'crux --parameters=./parameters.json' or 'crux -o ./parameters.json'"
 })
 
-function run () {
+function run() {
   const args = argv.run()
   const variablesPath = args.options.variables
   const outputPath = args.options.output
   const minifiedPath = args.options.minify
-  const options = args.options.parameters
-  const variables = fs.readFileSync(variablesPath, { encoding: 'utf-8' })
+  const optionsPath = args.options.parameters
+  const variables = variablesPath
+    ? fs.readFileSync(variablesPath, { encoding: 'utf-8' })
+    : '{}'
+  const options = optionsPath ?
+    fs.readFileSync(optionsPath, { encoding: 'utf-8' })
+    : '{}'
 
-  const css = generate(JSON.parse(variables) || {}, options || {})
+  const css = generate(JSON.parse(variables) || {}, JSON.parse(options) || {})
   try {
     fs.writeFileSync(outputPath, css)
     console.log('Boom! Your css has been written to ' + outputPath)
