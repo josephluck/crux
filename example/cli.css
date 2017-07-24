@@ -279,6 +279,8 @@
 .fill-secondary { fill: blue; }
 .stroke-primary { stroke: red; }
 .stroke-secondary { stroke: blue; }
+.z-1 { z-index: 1; }
+.z-2 { z-index: 2; }
 
 .bg-primary-a:active { background: red; }
 .bg-secondary-a:active { background: blue; }
@@ -561,6 +563,8 @@
 .fill-secondary-a:active { fill: blue; }
 .stroke-primary-a:active { stroke: red; }
 .stroke-secondary-a:active { stroke: blue; }
+.z-1-a:active { z-index: 1; }
+.z-2-a:active { z-index: 2; }
 
 @media screen and (max-width: 30em) {
   .bg-primary-ns { background: red; }
@@ -844,6 +848,8 @@
   .fill-secondary-ns { fill: blue; }
   .stroke-primary-ns { stroke: red; }
   .stroke-secondary-ns { stroke: blue; }
+  .z-1-ns { z-index: 1; }
+  .z-2-ns { z-index: 2; }
 }
 
 @media screen and (min-width: 30em) and (max-width: 60em) {
@@ -1128,6 +1134,8 @@
   .fill-secondary-m { fill: blue; }
   .stroke-primary-m { stroke: red; }
   .stroke-secondary-m { stroke: blue; }
+  .z-1-m { z-index: 1; }
+  .z-2-m { z-index: 2; }
 }
 
 @media screen and (min-width: 60em) {
@@ -1412,4 +1420,6 @@
   .fill-secondary-l { fill: blue; }
   .stroke-primary-l { stroke: red; }
   .stroke-secondary-l { stroke: blue; }
+  .z-1-l { z-index: 1; }
+  .z-2-l { z-index: 2; }
 }

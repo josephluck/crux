@@ -77,6 +77,7 @@ export interface PrefixList {
     'word-spacing'?: string;
     'svg-stroke'?: string;
     'svg-fill'?: string;
+    'z-index'?: string;
 }
 export declare type Prefixes = Record<keyof PrefixList, string>;
 export interface Breakpoints {
@@ -114,6 +115,7 @@ export interface VariablesList {
     spacing?: Variables;
     media?: Breakpoints;
     pseudoClasses?: PseudoClasses;
+    zIndicies?: Variables;
 }
 export declare type Ast = Description[];
 export declare function backgroundColors(generator: PropertyGenerator, vars: Variables): Ast;
@@ -142,6 +144,7 @@ export declare function svgStrokes(generator: PropertyGenerator, vars: Variables
 export declare function topLeftBottomRight(generator: PropertyGenerator, vars: Variables): Ast;
 export declare function widths(generator: PropertyGenerator, vars: Variables): Ast;
 export declare function wordSpacings(generator: PropertyGenerator, vars: Variables): Ast;
+export declare function zIndicies(generator: PropertyGenerator, vars: Variables): Ast;
 export declare type PropertyGenerator = (property: string | string[], prefix: keyof Prefixes, variables: Variables) => Description;
 export declare function generateAst(generator: PropertyGenerator, vars: VariablesList, includeCore: boolean): Ast;
 export declare function copyAst(ast: Ast, suffix: string): Ast;

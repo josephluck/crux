@@ -79,6 +79,7 @@ export interface PrefixList {
   'word-spacing'?: string
   'svg-stroke'?: string
   'svg-fill'?: string
+  'z-index'?: string
 }
 
 const defaultPrefixes: Prefixes = {
@@ -160,11 +161,12 @@ const defaultPrefixes: Prefixes = {
   'word-spacing': 'ws',
   'svg-fill': 'fill',
   'svg-stroke': 'stroke',
+  'z-index': 'z',
 }
 
 export type Prefixes = Record<keyof PrefixList, string>
 
-function createPrefixes (prefixes: PrefixList = {}): Prefixes {
+function createPrefixes(prefixes: PrefixList = {}): Prefixes {
   const pre = {
     ...defaultPrefixes,
     ...prefixes,
@@ -214,13 +216,14 @@ export interface VariablesList {
   spacing?: Variables
   media?: Breakpoints
   pseudoClasses?: PseudoClasses
+  zIndicies?: Variables
 }
 
 export type Ast = Description[]
 
-function generateCore (generate: PropertyGenerator): Ast {
+function generateCore(generate: PropertyGenerator): Ast {
   const core = {
-    border () {
+    border() {
       return [
         generate('border', 'border-all', 'solid 1px'),
         generate('border-top', 'border-top', 'solid 1px'),
@@ -229,7 +232,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         generate('border-left', 'border-left', 'solid 1px'),
       ]
     },
-    borderStyle () {
+    borderStyle() {
       const borderStyles = {
         none: 'none',
         dotted: 'dotted',
@@ -249,7 +252,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         generate('border-left-style', 'border-left-style', borderStyles),
       ]
     },
-    cursor () {
+    cursor() {
       return [
         generate('cursor', 'cursor', {
           auto: 'auto',
@@ -289,7 +292,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    display () {
+    display() {
       return [
         generate('display', 'display', {
           b: 'block',
@@ -317,7 +320,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    flex () {
+    flex() {
       const flexSizes = {
         0: '0 0 auto',
         1: '1',
@@ -374,7 +377,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    float () {
+    float() {
       return [
         generate('float', 'float', {
           r: 'right',
@@ -382,7 +385,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    font () {
+    font() {
       return [
         generate('font-style', 'font-style', {
           normal: 'normal',
@@ -391,7 +394,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    overflow () {
+    overflow() {
       return [
         generate('overflow', 'overflow', {
           hidden: 'hidden',
@@ -401,7 +404,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    position () {
+    position() {
       return [
         generate('position', 'position', {
           relative: 'relative',
@@ -411,7 +414,7 @@ function generateCore (generate: PropertyGenerator): Ast {
         }),
       ]
     },
-    text () {
+    text() {
       return [
         generate('text-transform', 'text-transform', {
           uppercase: 'uppercase',
@@ -443,13 +446,13 @@ function generateCore (generate: PropertyGenerator): Ast {
   ])
 }
 
-export function backgroundColors (generator: PropertyGenerator, vars: Variables): Ast {
+export function backgroundColors(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('background', 'background', vars),
   ]
 }
 
-export function borderColors (generator: PropertyGenerator, vars: Variables): Ast {
+export function borderColors(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('border-color', 'border-color', vars),
     generator('border-top-color', 'border-top-color', vars),
@@ -459,7 +462,7 @@ export function borderColors (generator: PropertyGenerator, vars: Variables): As
   ]
 }
 
-export function borderRadii (generator: PropertyGenerator, vars: Variables): Ast {
+export function borderRadii(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('border-radius', 'border-radius-all', vars),
     generator('border-top-right-radius', 'border-top-right-radius', vars),
@@ -469,7 +472,7 @@ export function borderRadii (generator: PropertyGenerator, vars: Variables): Ast
   ]
 }
 
-export function borderWidths (generator: PropertyGenerator, vars: Variables): Ast {
+export function borderWidths(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('border-width', 'border-width-all', vars),
     generator('border-top-width', 'border-top-width', vars),
@@ -479,49 +482,49 @@ export function borderWidths (generator: PropertyGenerator, vars: Variables): As
   ]
 }
 
-export function colors (generator: PropertyGenerator, vars: Variables): Ast {
+export function colors(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('color', 'font-color', vars),
   ]
 }
 
-export function fontFamilies (generator: PropertyGenerator, vars: Variables): Ast {
+export function fontFamilies(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('font-family', 'font-family', vars),
   ]
 }
 
-export function fontSize (generator: PropertyGenerator, vars: Variables): Ast {
+export function fontSize(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('font-size', 'font-size', vars),
   ]
 }
 
-export function fontWeights (generator: PropertyGenerator, vars: Variables): Ast {
+export function fontWeights(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('font-weight', 'font-weight', vars),
   ]
 }
 
-export function letterSpacings (generator: PropertyGenerator, vars: Variables): Ast {
+export function letterSpacings(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('letter-spacing', 'letter-spacing', vars),
   ]
 }
 
-export function lineHeights (generator: PropertyGenerator, vars: Variables): Ast {
+export function lineHeights(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('line-height', 'line-height', vars),
   ]
 }
 
-export function heights (generator: PropertyGenerator, vars: Variables): Ast {
+export function heights(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('height', 'height', vars),
   ]
 }
 
-export function margins (generator: PropertyGenerator, vars: Variables): Ast {
+export function margins(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('margin-top', 'margin-top', vars),
     generator('margin-right', 'margin-right', vars),
@@ -533,55 +536,55 @@ export function margins (generator: PropertyGenerator, vars: Variables): Ast {
   ]
 }
 
-export function maxHeights (generator: PropertyGenerator, vars: Variables): Ast {
+export function maxHeights(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('max-height', 'max-height', vars),
   ]
 }
 
-export function maxWidths (generator: PropertyGenerator, vars: Variables): Ast {
+export function maxWidths(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('max-width', 'max-width', vars),
   ]
 }
 
-export function minHeights (generator: PropertyGenerator, vars: Variables): Ast {
+export function minHeights(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('min-height', 'min-height', vars),
   ]
 }
 
-export function minWidths (generator: PropertyGenerator, vars: Variables): Ast {
+export function minWidths(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('min-width', 'min-width', vars),
   ]
 }
 
-export function opacity (generator: PropertyGenerator, vars: Variables): Ast {
+export function opacity(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('opacity', 'opacity', vars),
   ]
 }
 
-export function outlineColors (generator: PropertyGenerator, vars: Variables): Ast {
+export function outlineColors(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('outline-color', 'outline-color', vars),
   ]
 }
 
-export function outlineOffset (generator: PropertyGenerator, vars: Variables): Ast {
+export function outlineOffset(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('outline-offset', 'outline-offset', vars),
   ]
 }
 
-export function outlineWidths (generator: PropertyGenerator, vars: Variables): Ast {
+export function outlineWidths(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('outline-width', 'outline-width', vars),
   ]
 }
 
-export function paddings (generator: PropertyGenerator, vars: Variables): Ast {
+export function paddings(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('padding-top', 'padding-top', vars),
     generator('padding-right', 'padding-right', vars),
@@ -593,19 +596,19 @@ export function paddings (generator: PropertyGenerator, vars: Variables): Ast {
   ]
 }
 
-export function svgFills (generator: PropertyGenerator, vars: Variables): Ast {
+export function svgFills(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('fill', 'svg-fill', vars),
   ]
 }
 
-export function svgStrokes (generator: PropertyGenerator, vars: Variables): Ast {
+export function svgStrokes(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('stroke', 'svg-stroke', vars),
   ]
 }
 
-export function topLeftBottomRight (generator: PropertyGenerator, vars: Variables): Ast {
+export function topLeftBottomRight(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('top', 'position-top', vars),
     generator('right', 'position-right', vars),
@@ -614,15 +617,21 @@ export function topLeftBottomRight (generator: PropertyGenerator, vars: Variable
   ]
 }
 
-export function widths (generator: PropertyGenerator, vars: Variables): Ast {
+export function widths(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('width', 'width', vars),
   ]
 }
 
-export function wordSpacings (generator: PropertyGenerator, vars: Variables): Ast {
+export function wordSpacings(generator: PropertyGenerator, vars: Variables): Ast {
   return [
     generator('word-spacing', 'word-spacing', vars),
+  ]
+}
+
+export function zIndicies(generator: PropertyGenerator, vars: Variables): Ast {
+  return [
+    generator('z-index', 'z-index', vars),
   ]
 }
 
@@ -632,10 +641,10 @@ export type PropertyGenerator = (
   variables: Variables,
 ) => Description
 
-function createGenerator (
+function createGenerator(
   prefixes: Prefixes,
 ): PropertyGenerator {
-  return function propertyGenerator (
+  return function propertyGenerator(
     property: string | string[],
     prefix: keyof Prefixes,
     variables: Variables,
@@ -647,11 +656,11 @@ function createGenerator (
   }
 }
 
-function flattenArray (arr: any[]): any[] {
+function flattenArray(arr: any[]): any[] {
   return [].concat.apply([], arr)
 }
 
-export function generateAst (generator: PropertyGenerator, vars: VariablesList, includeCore: boolean): Ast {
+export function generateAst(generator: PropertyGenerator, vars: VariablesList, includeCore: boolean): Ast {
   return flattenArray([
     includeCore ? generateCore(generator) : [],
     vars.colors ? backgroundColors(generator, vars.colors) : [],
@@ -680,10 +689,11 @@ export function generateAst (generator: PropertyGenerator, vars: VariablesList, 
     vars.letterSpacings ? wordSpacings(generator, vars.letterSpacings) : [],
     vars.colors ? svgFills(generator, vars.colors) : [],
     vars.colors ? svgStrokes(generator, vars.colors) : [],
+    vars.zIndicies ? zIndicies(generator, vars.zIndicies) : [],
   ])
 }
 
-export function copyAst (ast: Ast, suffix: string): Ast {
+export function copyAst(ast: Ast, suffix: string): Ast {
   return ast.map(property => Object.assign({}, property, {
     classNames: Object.keys(property.classNames).reduce((prev, curr) => {
       return Object.assign({}, prev, {
@@ -693,7 +703,7 @@ export function copyAst (ast: Ast, suffix: string): Ast {
   }))
 }
 
-function generateCssForClassNames (
+function generateCssForClassNames(
   classNames: ClassNames,
   properties: string[],
   space: string,
@@ -702,19 +712,19 @@ function generateCssForClassNames (
     const inner = properties.reduce((previous, property) => {
       return previous.concat(`${property}: ${classNames[className]}; `)
     }, '')
-    return pre.concat(`${space}.${className} { ${inner }}\n`)
+    return pre.concat(`${space}.${className} { ${inner}}\n`)
   }, '')
 }
 
-export function astToCss (ast: Ast, indent: number = 0): string {
-  const space = Array.from({length: indent + 1}).join(' ')
+export function astToCss(ast: Ast, indent: number = 0): string {
+  const space = Array.from({ length: indent + 1 }).join(' ')
   return ast.reduce((prev, prop) => {
     const classes = generateCssForClassNames(prop.classNames, prop.property, space)
     return prev.concat(classes)
   }, '')
 }
 
-export function generateMediaCss (ast: Ast, media: Breakpoints): string {
+export function generateMediaCss(ast: Ast, media: Breakpoints): string {
   return Object.keys(media).map(point => {
     let mediaAst = copyAst(ast, `-${point}`)
     let min = media[point].min
@@ -728,13 +738,13 @@ export function generateMediaCss (ast: Ast, media: Breakpoints): string {
   }).join('\n')
 }
 
-function generatePseudoCss (ast: Ast, pseudoClasses: PseudoClasses): string {
+function generatePseudoCss(ast: Ast, pseudoClasses: PseudoClasses): string {
   return Object.keys(pseudoClasses).reduce((prev, key) => {
     return astToCss(copyAst(ast, `-${pseudoClasses[key]}:${key}`))
   }, '')
 }
 
-export function generateCss (vars: VariablesList, prefixes: PrefixList, includeCore: boolean): string {
+export function generateCss(vars: VariablesList, prefixes: PrefixList, includeCore: boolean): string {
   const generator = createGenerator(createPrefixes(prefixes))
   const ast = generateAst(generator, vars, includeCore)
   const coreCss = astToCss(ast)
